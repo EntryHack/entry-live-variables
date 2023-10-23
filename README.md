@@ -6,7 +6,7 @@ real-time variables/lists.
 ## Usage
 
 ```ts
-import { LiveVariableClient } from "entry-live-variables";
+import { LiveVariableClient } from "https://deno.land/x/entry_live_variables/mod.ts";
 
 new LiveVariableClient()
   .once("connect", console.log)

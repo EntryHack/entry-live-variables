@@ -1,5 +1,8 @@
-import "https://deno.land/std@0.204.0/dotenv/load.ts";
-import { LiveList, LiveVariableClient } from "../mod.ts";
+import "https://deno.land/std/dotenv/load.ts";
+import {
+  LiveList,
+  LiveVariableClient,
+} from "https://deno.land/x/entry_live_variables/mod.ts";
 
 const username = Deno.env.get("USERNAME")!;
 const password = Deno.env.get("PASSWORD")!;
