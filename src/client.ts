@@ -41,6 +41,7 @@ export class LiveVariableClient extends TypedEmitter<{
   #credentials?: { username: string; password: string };
   #variables = new Map<string, LiveVariable>();
   #lists = new Map<string, LiveList>();
+  #connected = false;
 
   constructor() {
     super();
@@ -49,6 +50,14 @@ export class LiveVariableClient extends TypedEmitter<{
   setCredentials(username: string, password: string) {
     this.#credentials = { username, password };
     return this;
+  }
+
+  get variables() {
+    return this.#variables;
+  }
+
+  get lists() {
+    return this.#lists;
   }
 
   async connect(
@@ -187,13 +196,21 @@ export class LiveVariableClient extends TypedEmitter<{
           this.#lists.set(list.id, list);
         }
 
-        this.emit("connect", variables);
         this.#socket = socket;
+        this.#connected = true;
+        this.emit("connect", variables);
       },
     );
 
     this.#socket = socket;
 
     return this;
+  }
+
+  whenConnected() {
+    return new Promise<void>((res) => {
+      if (this.#connected) res();
+      else this.once("connect", () => res());
+    });
   }
 }
