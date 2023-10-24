@@ -21,7 +21,7 @@ export interface LiveVariableInfo {
 export interface LiveListInfo {
   _id: string;
   id: string;
-  list: string[];
+  list?: string[];
   value: Record<string, string>;
   variableType: "list";
 }

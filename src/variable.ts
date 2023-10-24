@@ -111,10 +111,10 @@ export class LiveList extends TypedEmitter<{
     this.#socket = socket;
     this._id = info._id;
     this.id = info.id;
-    this.#value = info.list.map((key) => {
+    this.#value = info.list?.map((key) => {
       const item = info.value[key];
       return [key, item];
-    });
+    }) ?? [];
   }
 
   get value() {
