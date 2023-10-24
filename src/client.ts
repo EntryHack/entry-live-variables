@@ -1,6 +1,6 @@
 import { io } from "./deps.ts";
 import { LiveVariableError } from "./error.ts";
-import { graphql } from "./utils/graphql.ts";
+import { graphql, Variables } from "./utils/graphql.ts";
 import TypedEmitter from "./utils/typed-emitter.ts";
 import { LiveList, LiveVariable } from "./variable.ts";
 
@@ -60,16 +60,23 @@ export class LiveVariableClient extends TypedEmitter<{
     return this.#lists;
   }
 
+  graphql<T>(query: string, variables: Variables) {
+    if (!this.#credentials) {
+      throw new Error(LiveVariableError.CREDENTIALS_NOT_SET);
+    }
+    return graphql<T>(
+      this.#credentials.username,
+      this.#credentials.password,
+      query,
+      variables,
+    );
+  }
+
   async connect(
     projectId: string,
     options?: Partial<LiveVariableClientConnectOptions>,
   ) {
-    if (!this.#credentials) {
-      throw new Error(LiveVariableError.CREDENTIALS_NOT_SET);
-    }
-    const query = await graphql<{ cloudServerInfo: { query: string } }>(
-      this.#credentials.username,
-      this.#credentials.password,
+    const query = await this.graphql<{ cloudServerInfo: { query: string } }>(
       `query($id:ID!){cloudServerInfo(id:$id){query}}`,
       { id: projectId },
     );

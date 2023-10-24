@@ -1,7 +1,7 @@
 import fetch from "./fetch.ts";
 import { getTokens } from "./tokens.ts";
 
-type Variables = {
+export type Variables = {
   [key: string]: string | number | boolean | string[] | number[] | Variables;
 };
 
